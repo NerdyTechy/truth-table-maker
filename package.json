@@ -6,8 +6,7 @@
   "main": "dist/index.js",
   "license": "ISC",
   "scripts": {
-    "test": "ts-node --files src/index.ts \"a and b and a or c\"",
-    "build": "tsc"
+    "test": "ts-node --files src/index.ts \"a and b and a or c\""
   },
   "bin": {
     "truth-table": "dist/index.js"
