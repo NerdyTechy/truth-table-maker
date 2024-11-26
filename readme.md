@@ -1,6 +1,8 @@
 # Truth Table Generator
 Command line truth table generator that takes word-based logical expressions and generates a nice table to help you to understand them.
 
+![Demo image](https://raw.githubusercontent.com/NerdyTechy/truth-table-maker/refs/heads/main/image.png)
+
 ## Setup
 ```bash
 git clone https://github.com/NerdyTechy/truth-table-maker # clone the repo
