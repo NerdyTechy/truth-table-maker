@@ -73,6 +73,7 @@ function generateTruthTable(expression: string) {
     const variables = b.getVariableNames(); // extract variables from the expression
     const subExpressions = extractSubExpressions(expression);
     const allExpressions = Array.from(new Set([...subExpressions, expression]));
+    const filteredExpressions = allExpressions.filter(exp => !variables.includes(exp)); // filter out duplicate variables
     const numRows = 2 ** variables.length; // work out how many rows the table will have
     const truthTable: boolean[][] = []; // initialise the table as a 2d array
 
@@ -84,7 +85,7 @@ function generateTruthTable(expression: string) {
         truthTable.push(row);
     }
 
-    const headers = variables.concat(allExpressions.map(exp => translateToLogicSymbols(exp))); // get header titles and translate words->symbols
+    const headers = variables.concat(filteredExpressions.map(exp => translateToLogicSymbols(exp))); // get header titles and translate words->symbols
     const colWidths = headers.map(header => header.length); // get widths of each col for both the border and to pad the values into the center of the cols
     const border = '+' + headers.map((_, i) => '-'.repeat(colWidths[i] + 2)).join('+') + '+'; // add a nice sexy border to the outside of the table
 
@@ -97,7 +98,7 @@ function generateTruthTable(expression: string) {
     // loop over each of the value rows, parse and evaluate the expressions, then print it all nicely
     truthTable.forEach(row => {
         const trueVariables = variables.filter((_, i) => row[i]);
-        const results = allExpressions.map(expr => {
+        const results = filteredExpressions.map(expr => {
             const exprEvaluator = new BooleanExpressions(expr);
             return exprEvaluator.evaluate(trueVariables);
         });
