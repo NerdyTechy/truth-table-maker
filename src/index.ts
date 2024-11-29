@@ -31,15 +31,16 @@ function extractSubExpressions(expression: string): string[] {
     const subExpressions: Set<string> = new Set();
     // there is definitely a far better way of doing this that doesn't make you hate yourself
     // but that wouldn't be any fun so have a very long and confusing regex
-    const regex = /\b(not\s+\w+|\w+\s+and\s+\w+|\w+\s+or\s+\w+|\w+\s+nand\s+\w+|\w+\s+nor\s+\w+|\w+\s+xor\s+\w+)\b/g;
+    const regex = /\b(not\s+\w+|\w+\s+(and|or|nand|nor|xor)\s+not\s+\w+|\w+\s+(and|or|nand|nor|xor)\s+\w+)\b/g;
     let match;
     while ((match = regex.exec(expression)) !== null) {
-        subExpressions.add(match[1]);
+        const subExpression = match[0];
+        subExpressions.add(subExpression);
         // make sure negations are given their own column
-        if (match[1].startsWith('not ')) {
-            subExpressions.add(match[1].replace('not ', ''));
+        if (subExpression.startsWith('not ')) {
+            subExpressions.add(subExpression.replace('not ', ''));
         } else {
-            const negatedExpression = `not (${match[1]})`;
+            const negatedExpression = `not (${subExpression})`;
             if (expression.includes(negatedExpression)) {
                 subExpressions.add(negatedExpression);
             }
@@ -72,6 +73,7 @@ function generateTruthTable(expression: string) {
     const b = new BooleanExpressions(expression);
     const variables = b.getVariableNames(); // extract variables from the expression
     const subExpressions = extractSubExpressions(expression);
+    console.log("subexpressions", subExpressions);
     const allExpressions = Array.from(new Set([...subExpressions, expression]));
     const filteredExpressions = allExpressions.filter(exp => !variables.includes(exp)); // filter out duplicate variables
     const numRows = 2 ** variables.length; // work out how many rows the table will have
