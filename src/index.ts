@@ -73,7 +73,6 @@ function generateTruthTable(expression: string) {
     const b = new BooleanExpressions(expression);
     const variables = b.getVariableNames(); // extract variables from the expression
     const subExpressions = extractSubExpressions(expression);
-    console.log("subexpressions", subExpressions);
     const allExpressions = Array.from(new Set([...subExpressions, expression]));
     const filteredExpressions = allExpressions.filter(exp => !variables.includes(exp)); // filter out duplicate variables
     const numRows = 2 ** variables.length; // work out how many rows the table will have
